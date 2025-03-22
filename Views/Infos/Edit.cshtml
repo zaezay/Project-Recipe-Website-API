@@ -1,0 +1,27 @@
+﻿@model RecipeSharingWebsiteAPI.Models.info
+
+<h2>Edit Recipe Info</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="recipe_id" /> <
+
+    <div class="form-group">
+        <label asp-for="recipe_title" class="control-label"></label>
+        <input asp-for="recipe_title" class="form-control" />
+        <span asp-validation-for="recipe_title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="recipe_image" class="control-label"></label>
+        <input asp-for="recipe_image" class="form-control" type="file" accept="image/*" />
+        <span asp-validation-for="recipe_image" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="create_by" class="control-label"></label>
+        <input asp-for="create_by" class="form-control" />
+        <span asp-validation-for="create_by" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+

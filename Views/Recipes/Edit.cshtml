@@ -1,0 +1,32 @@
+﻿@model RecipeSharingWebsiteAPI.Models.recipe
+
+@{
+    ViewData["Title"] = "Edit Recipe Description";
+}
+
+<h2>Edit Recipe Description</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="detail_id" />
+    <input type="hidden" asp-for="recipe_id" />
+
+    <div class="form-group">
+        <label asp-for="recipe_ingredient" class="control-label"></label>
+        <textarea asp-for="recipe_ingredient" class="form-control" rows="5" placeholder="Enter ingredients..."></textarea>
+        <span asp-validation-for="recipe_ingredient" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="recipe_instruction" class="control-label"></label>
+        <textarea asp-for="recipe_instruction" class="form-control" rows="5" placeholder="Enter instructions..."></textarea>
+        <span asp-validation-for="recipe_instruction" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

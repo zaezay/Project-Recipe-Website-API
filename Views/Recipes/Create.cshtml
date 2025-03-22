@@ -1,0 +1,24 @@
+﻿@model RecipeSharingWebsiteAPI.Models.recipe
+
+<h2>Create New Recipe</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="recipe_id" class="control-label"></label>
+        <select asp-for="recipe_id" class="form-control" asp-items="ViewBag.InfoSelectList" style="color:black;"></select>
+        <span asp-validation-for="recipe_id" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="recipe_ingredient" class="control-label"></label>
+        <textarea asp-for="recipe_ingredient" class="form-control" rows="5" cols="50"></textarea>
+        <span asp-validation-for="recipe_ingredient" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="recipe_instruction" class="control-label"></label>
+        <textarea asp-for="recipe_instruction" class="form-control" rows="5" cols="50"></textarea>
+        <span asp-validation-for="recipe_instruction" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+

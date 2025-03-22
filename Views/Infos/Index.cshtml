@@ -1,0 +1,40 @@
+﻿@model IEnumerable<RecipeSharingWebsiteAPI.Models.info>
+
+<h2>Recipe List</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Recipe Title</th>
+            <th>Recipe Image</th>
+            <th>Created By</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var info in Model)
+        {
+            <tr>
+                <td>@info.recipe_title</td>
+                <td>
+                    @if (info.recipe_image != null && info.recipe_image.Length > 0)
+                    {
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(info.recipe_image)" alt="Recipe Image" width="100" height="100" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
+                <td>@info.create_by</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@info.recipe_id" class="btn btn-primary btn-sm">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@info.recipe_id" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Create" class="btn btn-success">Add New Info</a>
+
+

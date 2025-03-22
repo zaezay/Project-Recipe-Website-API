@@ -1,0 +1,96 @@
+﻿@model IEnumerable<RecipeSharingWebsiteAPI.Models.info>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to Recipe Nest Website🍽️✨</h1>
+    <p>Explore delicious recipes, share your culinary creations, and connect with food lovers from around the world.Start cooking, sharing, and savoring today! 🍰🥗🔥</p>
+</div>
+
+<div class="container">
+    <div class="row">
+        @foreach (var info in Model)
+        {
+            <div class="col-md-4 d-flex align-items-stretch">
+                <div class="card mb-4" style="width: 18rem;">
+                    @if (info.recipe_image != null && info.recipe_image.Length > 0)
+                    {
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(info.recipe_image)" class="card-img-top" alt="Recipe Image">
+                    }
+                    else
+                    {
+                        <img src="https://via.placeholder.com/150" class="card-img-top" alt="No Image">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@info.recipe_title</h5>
+                        <p class="card-text">Created by: @info.create_by</p>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#recipeModal" data-recipe-id="@info.recipe_id" data-recipe-title="@info.recipe_title" data-recipe-created-by="@info.create_by" data-recipe-image="data:image/jpeg;base64,@Convert.ToBase64String(info.recipe_image)">View Details</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="recipeModal" tabindex="-1" aria-labelledby="recipeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="recipeModalLabel">Recipe Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img id="recipeImage" src="" class="img-fluid mb-3" alt="Recipe Image">
+                <h5 id="recipeTitle"></h5>
+                <p>Created by: <span id="recipeCreatedBy"></span></p>
+                <h6>Ingredients:</h6>
+                <p id="recipeIngredients"></p>
+                <h6>Instructions:</h6>
+                <p id="recipeInstructions"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var recipeModal = document.getElementById('recipeModal');
+        recipeModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var recipeId = button.getAttribute('data-recipe-id');
+            var recipeTitle = button.getAttribute('data-recipe-title');
+            var recipeCreatedBy = button.getAttribute('data-recipe-created-by');
+            var recipeImage = button.getAttribute('data-recipe-image');
+
+            var modalTitle = recipeModal.querySelector('.modal-title');
+            var modalBodyTitle = recipeModal.querySelector('#recipeTitle');
+            var modalBodyCreatedBy = recipeModal.querySelector('#recipeCreatedBy');
+            var modalBodyImage = recipeModal.querySelector('#recipeImage');
+            var modalBodyIngredients = recipeModal.querySelector('#recipeIngredients');
+            var modalBodyInstructions = recipeModal.querySelector('#recipeInstructions');
+
+            modalTitle.textContent = 'Recipe Details';
+            modalBodyTitle.textContent = recipeTitle;
+            modalBodyCreatedBy.textContent = recipeCreatedBy;
+            modalBodyImage.src = recipeImage || 'https://via.placeholder.com/150';
+
+            // Fetch recipe details using AJAX
+            fetch(`/Home/GetRecipeDetails?recipe_id=${recipeId}`)
+                .then(response => response.json())
+                .then(data => {
+                    modalBodyIngredients.innerHTML = data.recipe_ingredient.replace(/\n/g, '<br>');
+                    modalBodyInstructions.innerHTML = data.recipe_instruction.replace(/\n/g, '<br>');
+                })
+                .catch(error => console.error('Error fetching recipe details:', error));
+        });
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
